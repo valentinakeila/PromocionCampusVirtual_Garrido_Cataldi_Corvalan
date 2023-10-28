@@ -15,22 +15,23 @@ curso4 = Cursos("Laboratorio II")
 curso5 = Cursos("Ingles I")
 curso6 = Cursos("Ingles II")
 
-# Se meten en una lista
+curso1.alta = True
+curso1.contrasenia = "n"
 
-cursos = [curso1,curso2,curso3,curso4,curso5,curso6]
+cursos = [curso1,curso2,curso3,curso4,curso5,curso6,curso6]
 
 # Se definen los estudiantes sin estar matriculados
 
 alumno1 = Estudiante("Nicolas", "Cataldi", "nicolascataldi1@gmail.com", "ninini", 2003)
 alumno2 = Estudiante("Valentina", "Garrido", "valentinakeila12@gmail.com", "valenlamejor", 2009)
-alumno3 = Estudiante("Geraldine", "Mendiola", "geri@gmail.com", "gerilamejor", 2023)
+alumno3 = Estudiante("Geraldine", "Mendiola", "n", "n", 2023)
 
 alumnos = [alumno1, alumno2, alumno3]
 
 # Se definen los profesores
 
 profesor1 = Profesor("Mechi","Valoni","lamechi@gmail.com","mechilamejor","Analista en Sistemas",2020)
-profesor2 = Profesor("Miguel","Cabrera","miguelcabrera@gmail.com","miguelelmejor","Analista en Sistemas",2023)
+profesor2 = Profesor("Miguel","Cabrera","n","n","Analista en Sistemas",2023)
 
 profesores = [profesor1,profesor2]
 
@@ -92,8 +93,9 @@ def menu_estudiante():
         while opcion_alumno != "3":
             bandera_curso_encontrado = False
             print("1 - Matricularse a un curso")
-            print("2 - Ver curso")
-            print("3 - Volver al menu principal")
+            print("2 - Desmatricularse de un curso")
+            print("3 - Ver curso")
+            print("4 - Volver al menu principal")
             opcion_alumno = input("\nIngrese una opcion del menu: ")
             if opcion_alumno == "1":
                 opcion_curso = input(
@@ -126,6 +128,34 @@ def menu_estudiante():
                 elif cursos[opcion_curso].alta == False:
                     print("El curso no esta disponible\n")
             elif opcion_alumno == "2":
+                bandera_hay_curso_matriculado = False
+
+                for i in alumnos[alumno_indice].mis_cursos:
+                    bandera_hay_curso_matriculado = True # Si se encuentra al menos un curso es True
+
+                if bandera_hay_curso_matriculado == False: # Si no hay cursos muestra un error
+                    print("No esta matriculado a ningun curso")
+                else:
+                    contador_cursos_alumno = 0
+                    for i in range(0,len(alumnos[alumno_indice].mis_cursos)):
+                        contador_cursos_alumno =+ 1
+                        print(contador_cursos_alumno," - ",alumnos[alumno_indice].mis_cursos[i])
+                        
+                    opcion_curso_desmatricular = input("De que curso quiere desmatricularse?: ")
+                    opcion_curso_desmatricular = int(opcion_curso_desmatricular)
+                    if opcion_curso_desmatricular < 1 or opcion_curso_desmatricular > len(alumnos[alumno_indice].mis_cursos):
+                        print("Opcion no valida")
+                    else:
+                        alumnos[alumno_indice].mis_cursos.pop(opcion_curso_desmatricular - 1)
+                        print("Desmatriculado con exito")
+
+                        
+
+
+                
+                
+
+            elif opcion_alumno == "3":
                 numero_curso = 0
                 for i in alumnos[alumno_indice].mis_cursos:
                     numero_curso = numero_curso + 1
@@ -144,7 +174,7 @@ def menu_estudiante():
                     print("No esta matriculado a ningun curso")
                 print("\n")
 
-            elif opcion_alumno == "3":
+            elif opcion_alumno == "4":
 
                 break
 
@@ -181,9 +211,6 @@ def menu_profesor():
         if credencial_email == i.email and credencial_contrasenia == i.contrasenia:
             i.nombre
             resultado_login = True
-            break
-        else:
-            print("Error de ingreso")
             break
 
     if resultado_login == True:
@@ -248,6 +275,23 @@ def menu_profesor():
 
             else:
                 print("Opcion no valida.")
+    else:
+            print("Error de ingreso\n")
+            menu_admin()
 
 
+def menu_admin():
+    opcion_admin = input("1 - Ingresar como administrador\n2 - Volver al menu")
+    if opcion_admin == 1:
+        if input("Ingrese la contraseña") == "admin":
+
+            nombre = input("Ingrese el nombre del profesor: ")
+            apellido = input("Ingrese el apellido del profesor: ")
+            email = input("Ingrese su email: ")
+            contrasenia = input("Ingrese su contraseña: ")
+            titulo = input("Nombre de su titulo: ")
+            anio_egreso = int(input("Ingrese su año de egreso: "))
+            nuevo_profesor = Profesor(nombre,apellido,email,contrasenia,titulo,anio_egreso)
+            profesores.append(nuevo_profesor)
+        
 menu()
