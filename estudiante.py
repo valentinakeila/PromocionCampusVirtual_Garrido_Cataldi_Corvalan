@@ -1,14 +1,16 @@
 import random
 from usuario import Usuario
 from cursos import Cursos
+from carrera import Carrera
 
 
 class Estudiante(Usuario):
-    def __init__(self, nombre: str, apellido: str, email: str, contrasenia: str, anio_inscripcion: int):
+    def __init__(self, nombre: str, apellido: str, email: str, contrasenia: str, anio_inscripcion: int,nombre_carrera: str):
         super().__init__(nombre, apellido, email, contrasenia)
         self.__legajo = self.__generar_legajo()
         self.__anio_inscripcion_carrera = anio_inscripcion
         self.__mis_cursos = []
+        self.__nombre_carrera = nombre_carrera
 
     def __str__(self):
         return (super().__str__() + " Legajo: " + self.__legajo, " Año de inscripcion: " +
@@ -80,6 +82,13 @@ class Estudiante(Usuario):
     @mis_cursos.setter
     def mis_cursos(self,valor):
         self.__mis_cursos = valor
+
+    @property
+    def nombre_carrera(self):
+        return self.__nombre_carrera
+    @nombre_carrera.setter
+    def carrera(self, valor):
+         self.__nombre_carrera = valor
 
         # decorador classmethod, parametro cls, cuando el profe haga dictar curso esto agregara cursos a su lista
         # mis_cursos,

@@ -1,4 +1,6 @@
 import secrets
+from carrera import Carrera
+from archivo import Archivo
 
 
 class Cursos:
@@ -7,6 +9,7 @@ class Cursos:
         self.__nombre = nombre
         self.__contrasenia_matriculacion = self.__generar_contrasenia()
         self.__alta = False #Empieza dado de baja y un profesor puede darlo de alta para dictarlo
+        self.__archivos = []
 
     @classmethod
     def __generar_contrasenia(cls):
@@ -39,6 +42,15 @@ class Cursos:
     @contrasenia.setter
     def contrasenia(self, valor):
         self.__contrasenia_matriculacion = valor
+
+    
+    @property
+    def archivos(self):
+        return self.__archivos
+
+    @archivos.setter
+    def archivos(self, valor: Archivo):
+        self.__archivos = valor
 
 # cursoMatematica = Cursos("Matematica")
 # cursoLengua = Cursos("Lengua")

@@ -2,6 +2,8 @@ from usuario import *
 from estudiante import *
 from profesor import *
 from cursos import *
+from datetime import *
+from archivo import *
 
 # Se crean los cursos dados de baja por defecto
 # Valentina Garrido
@@ -18,13 +20,20 @@ curso6 = Cursos("Ingles II")
 curso1.alta = True
 curso1.contrasenia = "n"
 
-cursos = [curso1,curso2,curso3,curso4,curso5,curso6,curso6]
+carrera = Carrera("Tecnicatura Universitaria en Programación",2)
+carrera.cursos.append(curso1)
+carrera.cursos.append(curso2)
+carrera.cursos.append(curso3)
+carrera.cursos.append(curso4)
+carrera.cursos.append(curso5)
+carrera.cursos.append(curso6)
+
 
 # Se definen los estudiantes sin estar matriculados
 
-alumno1 = Estudiante("Nicolas", "Cataldi", "nicolascataldi1@gmail.com", "ninini", 2003)
-alumno2 = Estudiante("Valentina", "Garrido", "valentinakeila12@gmail.com", "valenlamejor", 2009)
-alumno3 = Estudiante("Geraldine", "Mendiola", "n", "n", 2023)
+alumno1 = Estudiante("Nicolas", "Cataldi", "nicolascataldi1@gmail.com", "ninini", 2003,"Tecnicatura Universitaria en Programación")
+alumno2 = Estudiante("Valentina", "Garrido", "valentinakeila12@gmail.com", "valenlamejor", 2009,"Tecnicatura Universitaria en Programación")
+alumno3 = Estudiante("Geraldine", "Mendiola", "n", "n", 2023,"Tecnicatura Universitaria en Programación")
 
 alumnos = [alumno1, alumno2, alumno3]
 
@@ -103,7 +112,7 @@ def menu_estudiante():
                 opcion_curso = int(opcion_curso) 
                 opcion_curso = opcion_curso - 1
 
-                for i in cursos:
+                for i in carrera.cursos:
                     if i.alta == True:
                         bandera_hay_cursos = True # Si se encuentra al menos un curso es True
 
@@ -111,21 +120,24 @@ def menu_estudiante():
                     print("No hay cursos disponibles")
 
                 if opcion_curso < 6 and opcion_curso > -1:
-                    if cursos[opcion_curso].alta == True:
+                    if carrera.cursos[opcion_curso].alta == True:
                         for i in range(0,len(alumnos[alumno_indice].mis_cursos)):
-                            if cursos[opcion_curso].nombre == alumnos[alumno_indice].mis_cursos[i]: # Busca en su lista de cursos si ya esta matriculado
+                            if carrera.cursos[opcion_curso].nombre == alumnos[alumno_indice].mis_cursos[i]: # Busca en su lista de cursos si ya esta matriculado
                                 bandera_curso_encontrado = True
                                 print("Ya esta matriculado a este curso")
-                        if bandera_curso_encontrado == False:
-                            contrasenia_curso = input("Ingrese la contraseña del curso\n")
-                            if contrasenia_curso == cursos[opcion_curso].contrasenia: # Compara la contraseña
-                                print("Matriculado con exito")
-                                alumnos[alumno_indice].mis_cursos.append(cursos[opcion_curso].nombre)
-                            else:
-                                print("Contraseña incorrecta")
+                        if carrera.nombre == alumnos[alumno_indice].nombre_carrera:
+                            if bandera_curso_encontrado == False:
+                                contrasenia_curso = input("Ingrese la contraseña del curso\n")
+                                if contrasenia_curso == carrera.cursos[opcion_curso].contrasenia: # Compara la contraseña
+                                    print("Matriculado con exito")
+                                    alumnos[alumno_indice].mis_cursos.append(carrera.cursos[opcion_curso])
+                                else:
+                                    print("Contraseña incorrecta")
+                        else:
+                            print(f"Usted no pertenece a la carrera {carrera.nombre}")
                 if opcion_curso < 0 or opcion_curso > 5:
                     print("Opcion no valida\n")
-                elif cursos[opcion_curso].alta == False:
+                elif carrera.cursos[opcion_curso].alta == False:
                     print("El curso no esta disponible\n")
             elif opcion_alumno == "2":
                 bandera_hay_curso_matriculado = False
@@ -139,7 +151,7 @@ def menu_estudiante():
                     contador_cursos_alumno = 0
                     for i in range(0,len(alumnos[alumno_indice].mis_cursos)):
                         contador_cursos_alumno =+ 1
-                        print(contador_cursos_alumno," - ",alumnos[alumno_indice].mis_cursos[i])
+                        print(contador_cursos_alumno," - ",alumnos[alumno_indice].mis_cursos[i].nombre)
                         
                     opcion_curso_desmatricular = input("De que curso quiere desmatricularse?: ")
                     opcion_curso_desmatricular = int(opcion_curso_desmatricular)
@@ -160,7 +172,7 @@ def menu_estudiante():
                 for i in alumnos[alumno_indice].mis_cursos:
                     numero_curso = numero_curso + 1
                     bandera_tiene_cursos = True
-                    print(numero_curso, "\t", i)
+                    print(numero_curso, "\t", i.nombre)
 
               
                 if bandera_tiene_cursos == True:
@@ -169,7 +181,9 @@ def menu_estudiante():
                     if opcion_mostrar_curso > len(alumnos[alumno_indice].mis_cursos) or opcion_mostrar_curso < 1:
                         print("Opcion no valida")
                     else:
-                        print("Nombre: ", alumnos[alumno_indice].mis_cursos[opcion_mostrar_curso - 1])
+                        print("Nombre: ", alumnos[alumno_indice].mis_cursos[opcion_mostrar_curso - 1].nombre)
+                        for i in alumnos[alumno_indice].mis_cursos[opcion_mostrar_curso - 1].archivos:
+                            print(f"{i.nombre}.{i.formato}\n")
                 else:
                     print("No esta matriculado a ningun curso")
                 print("\n")
@@ -233,21 +247,21 @@ def menu_profesor():
                 opcion_curso = int(opcion_curso) 
                 opcion_curso = opcion_curso - 1
 
-                for i in cursos:
+                for i in carrera.cursos:
                     if i.alta == False:
                         bandera_hay_cursos = True
 
                 if bandera_hay_cursos == False:
                     print("No hay cursos disponibles")
                 if opcion_curso < 6 and opcion_curso > -1:
-                    if cursos[opcion_curso].alta == True:
+                    if carrera.cursos[opcion_curso].alta == True:
                         bandera_curso_encontrado = True
                         print("Ya se esta dictando este curso")
                     if bandera_curso_encontrado == False:
                         print("Ahora eres el profesor de este curso")
-                        cursos[opcion_curso].alta = True
-                        profesores[profesor_indice].mis_cursos.append(cursos[opcion_curso]) # Se agrega a mis cursos el curso
-                        print(f"Curso a dictar: {cursos[opcion_curso].nombre}\nContraseña: {cursos[opcion_curso].contrasenia}\n") # Confirma el dictado con el nombre y la contraseña
+                        carrera.cursos[opcion_curso].alta = True
+                        profesores[profesor_indice].mis_cursos.append(carrera.cursos[opcion_curso]) # Se agrega a mis cursos el curso
+                        print(f"Curso a dictar: {carrera.cursos[opcion_curso].nombre}\nContraseña: {carrera.cursos[opcion_curso].contrasenia}\n") # Confirma el dictado con el nombre y la contraseña
                 else:
                     print("El curso no esta disponible\n")
                     
@@ -265,7 +279,16 @@ def menu_profesor():
                     if opcion_mostrar_curso > len(profesores[profesor_indice].mis_cursos) or opcion_mostrar_curso < 1:
                         print("Opcion no valida")
                     else:
-                        print("Nombre: ", profesores[profesor_indice].mis_cursos[opcion_mostrar_curso - 1].nombre + "\Contraseña: " + profesores[profesor_indice].mis_cursos[opcion_mostrar_curso - 1].contrasenia) # Informa el nombre del curso y su contraseña
+                        print("Nombre: ", profesores[profesor_indice].mis_cursos[opcion_mostrar_curso - 1].nombre + "\Contraseña: " , profesores[profesor_indice].mis_cursos[opcion_mostrar_curso - 1].contrasenia)
+                        print("Cantidad de archivos: ", len(profesores[profesor_indice].mis_cursos[opcion_mostrar_curso - 1].archivos))
+                        agregar_archivo = input("Desea agregar un archivo? Si/ No: ")
+                        if agregar_archivo.lower() == "si":
+                             nombre_archivo = input("Ingrese el nombre del archivo: ")
+                             formato_archivo = input("Ingrese el formato del archivo: ")
+                             archivo = Archivo(nombre_archivo,formato_archivo)
+                             profesores[profesor_indice].mis_cursos[opcion_mostrar_curso - 1].archivos.append(archivo)
+                             print("Archivo creado")
+                         # Informa el nombre del curso y su contraseña
                 else:
                     print("No esta dictando ningun curso")
                 print("\n")
