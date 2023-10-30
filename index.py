@@ -40,7 +40,7 @@ alumnos = [alumno1, alumno2, alumno3]
 # Se definen los profesores
 
 profesor1 = Profesor("Mechi","Valoni","lamechi@gmail.com","mechilamejor","Analista en Sistemas",2020)
-profesor2 = Profesor("Miguel","Cabrera","n","n","Analista en Sistemas",2023)
+profesor2 = Profesor("Miguel","Cabrera","miguelcabrera@gmail.com","miguelelmejor","Analista en Sistemas",2023)
 
 profesores = [profesor1,profesor2]
 
